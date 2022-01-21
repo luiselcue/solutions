@@ -1,0 +1,35 @@
+{
+  "name": "solutions",
+  "version": "1.0.0",
+  "description": "Custom WP theme for Solutions",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luiselcue/solutions.git"
+  },
+  "keywords": [
+    "custom",
+    "wordpress",
+    "theme"
+  ],
+  "author": "QE <luiselcue@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luiselcue/solutions/issues"
+  },
+  "homepage": "https://github.com/luiselcue/solutions#readme",
+  "devDependencies": {
+    "browser-sync": "^2.27.7",
+    "cssnano": "^5.0.15",
+    "gulp": "^4.0.2",
+    "gulp-postcss": "^9.0.1",
+    "gulp-sass": "^5.1.0",
+    "sass": "^1.49.0"
+  },
+  "dependencies": {
+    "gulp-cli": "^2.3.0"
+  }
+}

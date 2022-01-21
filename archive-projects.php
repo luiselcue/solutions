@@ -20,7 +20,7 @@
 		<?php do_action( 'sinatra_before_content' ); ?>
 
 		<main id="content" class="site-content" role="main"<?php sinatra_schema_markup( 'main' ); ?>>
-
+		
 		<?php do_action( 'sinatra_content_archive' ); ?>
 
 		</main><!-- #content .site-content -->
