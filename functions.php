@@ -7,28 +7,31 @@
  * @since   1.0.0
  */
 
+//Add or remove custom privileges for Editor
+function customize_editor_privilege(){
+  $role = get_role('editor');
+  $role->add_cap('edit_theme_options', true);
+  $role->remove_cap('moderate_comments');
+}
+
+add_action('init', 'customize_editor_privilege', 11);
+
+//Hide menu item
+function hide_menu() {
+	 remove_menu_page( 'edit-comments.php' );
+}
+
+add_action('admin_head', 'hide_menu');
+
+//Add custom scripts files
 function solutions_scripts() {
 	wp_enqueue_style('solutions-style', get_stylesheet_uri());
 }
 
 add_action('wp_enqueue_scripts', 'solutions_scripts', 20);
 
-/*DEBUG MODE*/
+//DEBUG MODE
 define('WP_DEBUG', true);
-
-/*Polylang functions*/
-/*
-function register_string_from_array($array) {
-  if ($array) {
-    foreach($array as $name => $string) {
-      if (gettype($name) == 'string' && gettype($string) == 'string') {
-        pll_register_string($name, $string, 'solutions');
-        
-      }
-    }
-  }
-}
-*/
 
 $ProjectLabels = array(
   'label'        => 'projects',
@@ -72,21 +75,8 @@ $ActivityLabels = array(
   'not_found_in_trash' => 'Not found in Trash',
 );
 
-//Polylang strings register
-/*
-register_string_from_array($ProjectLabels);
-register_string_from_array($ActivityLabels);
-*/
-
-/*Add new custom type activity*/
+//Add new custom type activity
 function add_custom_post_type($labels = false) {
-
-  //Polylang test
-  /*
-  foreach($labels as $name => $value) {
-    $labels[$name] = pll__($value);
-  }
-  */
 
   $args = array(
     'label'        => $labels['label'],
@@ -111,11 +101,11 @@ function add_custom_post_type($labels = false) {
 
   register_post_type( $labels['label'], $args );
 }
-/*Add new custom types*/
+
 add_action( 'init', function () use ($ProjectLabels) { add_custom_post_type($ProjectLabels); }, 0 );
 add_action( 'init', function () use ($ActivityLabels) { add_custom_post_type($ActivityLabels); }, 0 );
 
-/*Create new custom taxonomy*/ 
+//Create new custom taxonomy 
 function custom_hierarchical_taxonomy() {
  $labels = array(
   'name' => 'Programs',
@@ -147,9 +137,9 @@ add_action( 'init', 'custom_hierarchical_taxonomy', 0 );
 // Add the widget area to the header
 if ( function_exists( 'register_sidebar' ) ) {
 	register_sidebar( array(
-		'name' => 'Header Widget',
+		'name' => __('Header Widget'),
 		'id' => 'tj-header-widget',
-		'description' => 'Widget on Header',
+		'description' => __('Widget on Header'),
 		'before_widget' => '<div id="custom_widget_%1$s" class="custom_widget %2$s">',
 		'after_widget' => '</div>',
 		'before_title' => '<h2>',
@@ -165,10 +155,10 @@ add_action( 'sinatra_header_widget_location', 'add_header_widget', 10 );
 
 //Custom taxonomy Widget
 class Widget_Custom_tax_tag_cloud {
-
   function control(){
     echo 'No control panel';
   }
+
   function widget($args){
     echo $args['before_widget'];
     echo $args['before_title'] . 'Programs' . $args['after_title'];
@@ -182,6 +172,7 @@ class Widget_Custom_tax_tag_cloud {
     echo wp_list_categories($cloud_args);
     echo $args['after_widget'];
   }
+
   function register(){
     register_sidebar_widget('Custom taxonomy list', array('Widget_Custom_tax_tag_cloud', 'widget'));
     register_widget_control('Custom taxonomy list', array('Widget_Custom_tax_tag_cloud', 'control'));
@@ -191,7 +182,6 @@ class Widget_Custom_tax_tag_cloud {
 add_action("widgets_init", array('Widget_Custom_tax_tag_cloud', 'register'));
 
 //Custom taxonomy Guttenberg block
-
 function my_plugin_block_categories( $categories, $post ) {
  if ( $post->post_type !== 'post' ) {
    return $categories;

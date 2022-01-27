@@ -22,7 +22,6 @@ Template: sinatra
 }
 .widget_polylang ul li {
     list-style: none;
-    border: 50%;
 }
 .widget_polylang ul li a img {
     border-radius: 50%;
@@ -31,12 +30,18 @@ Template: sinatra
     display: none;
 }
 /*HERO SLIDER*/
-.si-hover-slider .si-flex-row>div {
-    border-right: none;
-}
-.si-hover-slider .post-category a:not(:first-child) {
-    background-color: transparent;
-    border: none;
+.si-hover-slider {
+    .post-category a:not(:first-child) {
+        background-color: transparent;
+        border: none;
+    }
+    .si-flex-row>div {
+        border-right: none;
+    }
+    .post-category a:not(:first-child) {
+        background-color: transparent;
+        border: none;
+    }
 }
 
 /*SINGLE*/
