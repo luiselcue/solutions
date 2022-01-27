@@ -1,38 +1,28 @@
-const gulp = require("gulp"),
-  postcss = require("gulp-postcss"),
-  sass = require("gulp-sass")(require("sass")),
-  cssnano = require("cssnano"),
-  browserSync = require("browser-sync").create(),
-  reload = browserSync.reload;
+const gulp = require('gulp'),
+    { parallel } = require('gulp'),
+    sass = require('gulp-sass')(require('sass')),
+    postcss = require('gulp-postcss'),
+    cssnano = require('cssnano'),
+    browserSync = require('browser-sync').create();
 
-gulp.task("compile-sass", () => {
-  let plugins = [cssnano()];
+function processStyles() {
+    const plugins = [cssnano()];
+    return gulp.src('sass/*.scss').pipe(sass()).pipe(postcss(plugins)).pipe(gulp.dest('./')).pipe(browserSync.stream());
+}
 
-  return gulp
-    .src("sass/*.scss")
-    .pipe(sass())
-    .pipe(postcss(plugins))
-    .pipe(gulp.dest("./"))
-    .pipe(reload({ stream: true }));
-});
+function browserLoad() {
+    browserSync.init({
+        proxy: 'localhost/solutions/',
+        port: 8080,
+    });
+}
 
-gulp.task("reload-browser", done => {
-  reload();
-  done();
-});
-module.exports = {
-  extends: ["eslint:recommended", "plugin:prettier/recommended"],
-  rules: {
-    "prettier/prettier": "warn"
-  }
-};
+function watchForBuildAssets() {
+    gulp.watch('sass/*.scss', parallel('processStyles'));
+    gulp.watch(['./*.html', './*.php']).on('change', browserSync.reload);
+}
 
-gulp.task("default", function() {
-  browserSync.init({
-    proxy: "localhost:80/solutions/",
-    notify: false
-  });
-
-  gulp.watch("./sass/*.scss", gulp.parallel("compile-sass"));
-  gulp.watch("./*.php", gulp.parallel("reload-browser"));
-});
+exports.processStyles = processStyles;
+exports.watchForBuildAssets = watchForBuildAssets;
+exports.browserLoad = browserLoad;
+exports.default = parallel(this.browserLoad, this.watchForBuildAssets);
